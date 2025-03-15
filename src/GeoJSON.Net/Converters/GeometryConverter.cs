@@ -126,6 +126,8 @@ namespace GeoJSON.Net.Converters
                     return value.ToObject<MultiPolygon>();
                 case GeoJSONObjectType.GeometryCollection:
                     return value.ToObject<GeometryCollection>();
+                case GeoJSONObjectType.ConstrainedPolygon:
+                    return value.ToObject<ConstrainedPolygon>();
                 case GeoJSONObjectType.Feature:
                 case GeoJSONObjectType.FeatureCollection:
                 default:

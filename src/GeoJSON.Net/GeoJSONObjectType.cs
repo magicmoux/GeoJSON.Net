@@ -77,6 +77,22 @@ namespace GeoJSON.Net
         /// <remarks>
         /// See https://tools.ietf.org/html/rfc7946#section-3.3
         /// </remarks>
-        FeatureCollection
+        FeatureCollection,
+
+        /// <summary>
+        /// Defines the ConstrainedPolygon type.
+        /// </summary>
+        /// <remarks>
+        /// Not part of the current IETF RFC
+        /// </remarks>
+        ConstrainedPolygon,
+
+        /// <summary>
+        /// Defines the MultiConstrainedPolygon type.
+        /// </summary>
+        /// <remarks>
+        /// Not part of the current IETF RFC
+        /// </remarks>
+        MultiConstrainedPolygon
     }
 }

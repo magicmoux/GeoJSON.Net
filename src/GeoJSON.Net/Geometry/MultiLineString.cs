@@ -48,6 +48,55 @@ namespace GeoJSON.Net.Geometry
         [JsonConverter(typeof(LineStringEnumerableConverter))]
         public ReadOnlyCollection<LineString> Coordinates { get; }
 
+        /// <summary>
+        /// Determines whether this instance has its first and last coordinate at the same position and all its segments connected at their ends and thereby is closed.
+        /// </summary>
+        /// <returns>
+        /// <c>true</c> if this instance is closed; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsClosed()
+        {
+            if (Coordinates.Count == 1)
+            { 
+                return Coordinates[0].IsLinearRing();
+            }
+            var firstCoordinate = Coordinates[0].Coordinates[0];
+            var endLine = Coordinates[Coordinates.Count - 1];
+            var lastCoordinate = endLine.Coordinates[endLine.Coordinates.Count - 1];
+
+            if (firstCoordinate.Longitude.Equals(lastCoordinate.Longitude)
+                   && firstCoordinate.Latitude.Equals(lastCoordinate.Latitude)
+                   && Nullable.Equals(firstCoordinate.Altitude, lastCoordinate.Altitude))
+            {
+                for (var i = 1; i < Coordinates.Count; i++)
+                {
+                    var previousLine = Coordinates[i - 1];
+                    lastCoordinate = previousLine.Coordinates[previousLine.Coordinates.Count -1];
+                    firstCoordinate = Coordinates[i].Coordinates[0];
+                    if (!(firstCoordinate.Longitude.Equals(lastCoordinate.Longitude)
+                       && firstCoordinate.Latitude.Equals(lastCoordinate.Latitude)
+                       && Nullable.Equals(firstCoordinate.Altitude, lastCoordinate.Altitude)))
+                        return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether this MultiLineString is a LinearRing.
+        /// </summary>
+        /// <remarks>
+        /// See https://tools.ietf.org/html/rfc7946#section-3.1.1
+        /// </remarks>
+        /// <returns>
+        /// <c>true</c> if it is a linear ring; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsLinearRing()
+        {
+            return IsClosed();
+        }
+
         #region IEqualityComparer, IEquatable
 
         /// <summary>
