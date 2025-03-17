@@ -10,24 +10,24 @@ using Newtonsoft.Json;
 namespace GeoJSON.Net.Geometry
 {
     /// <summary>
-    /// Defines the ConstrainedPolygon type.
-    /// Coordinates of a ConstrainedPolygon are a list of closing MultilineString arrays. The first element in 
+    /// Defines the PolyLine type.
+    /// Coordinates of a PolyLine are a list of closing MultilineString arrays. The first element in 
     /// the array represents the exterior ring. Any subsequent elements represent interior rings (or holes).
-    /// The main difference with the Polygon type is that with ConstrainedPolygon each inner Lines extremities should not be affected by polygon transformation algorithms (mainly simplification).
+    /// The main difference with the Polygon type is that with PolyLine each inner Lines extremities should not be affected by polygon transformation algorithms (mainly simplification).
     /// </summary>
     /// <remarks>
     /// See https://tools.ietf.org/html/rfc7946#section-3.1.6
     /// </remarks>
-    public class ConstrainedPolygon : GeoJSONObject, IGeometryObject, IEqualityComparer<ConstrainedPolygon>, IEquatable<ConstrainedPolygon>
+    public class PolyLine : GeoJSONObject, IGeometryObject, IEqualityComparer<PolyLine>, IEquatable<PolyLine>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConstrainedPolygon" /> class.
+        /// Initializes a new instance of the <see cref="PolyLine" /> class.
         /// </summary>
         /// <param name="coordinates">
         /// The linear rings with the first element in the array representing the exterior ring. 
         /// Any subsequent elements represent interior rings (or holes).
         /// </param>
-        public ConstrainedPolygon(IEnumerable<MultiLineString> coordinates)
+        public PolyLine(IEnumerable<MultiLineString> coordinates)
         {
             Coordinates = new ReadOnlyCollection<MultiLineString>(
                 coordinates?.ToArray() ?? throw new ArgumentNullException(nameof(coordinates)));
@@ -41,20 +41,20 @@ namespace GeoJSON.Net.Geometry
         }
 
         /// <summary>
-        /// Initializes a new <see cref="ConstrainedPolygon" /> from a 3-d array of <see cref="double" />s
+        /// Initializes a new <see cref="PolyLine" /> from a 3-d array of <see cref="double" />s
         /// that matches the "coordinates" field in the JSON representation.
         /// </summary>
         [JsonConstructor]
-        public ConstrainedPolygon(IEnumerable<IEnumerable<IEnumerable<IEnumerable<double>>>> coordinates)
+        public PolyLine(IEnumerable<IEnumerable<IEnumerable<IEnumerable<double>>>> coordinates)
             : this(coordinates?.Select(line => new MultiLineString(line))
               ?? throw new ArgumentNullException(nameof(coordinates)))
         {
         }
 
-        public override GeoJSONObjectType Type => GeoJSONObjectType.ConstrainedPolygon;
+        public override GeoJSONObjectType Type => GeoJSONObjectType.PolyLine;
 
         /// <summary>
-        /// Gets the list of linestrings defining this <see cref="ConstrainedPolygon" />.
+        /// Gets the list of linestrings defining this <see cref="PolyLine" />.
         /// </summary>
         [JsonProperty("coordinates", Required = Required.Always)]
         [JsonConverter(typeof(MultiLineStringEnumerableConverter))]
@@ -67,13 +67,13 @@ namespace GeoJSON.Net.Geometry
         /// </summary>
         public override bool Equals(object obj)
         {
-            return Equals(this, obj as ConstrainedPolygon);
+            return Equals(this, obj as PolyLine);
         }
 
         /// <summary>
         /// Determines whether the specified object is equal to the current object
         /// </summary>
-        public bool Equals(ConstrainedPolygon other)
+        public bool Equals(PolyLine other)
         {
             return Equals(this, other);
         }
@@ -81,7 +81,7 @@ namespace GeoJSON.Net.Geometry
         /// <summary>
         /// Determines whether the specified object instances are considered equal
         /// </summary>
-        public bool Equals(ConstrainedPolygon left, ConstrainedPolygon right)
+        public bool Equals(PolyLine left, PolyLine right)
         {
             if (base.Equals(left, right))
             {
@@ -93,7 +93,7 @@ namespace GeoJSON.Net.Geometry
         /// <summary>
         /// Determines whether the specified object instances are considered equal
         /// </summary>
-        public static bool operator ==(ConstrainedPolygon left, ConstrainedPolygon right)
+        public static bool operator ==(PolyLine left, PolyLine right)
         {
             if (ReferenceEquals(left, right))
             {
@@ -109,7 +109,7 @@ namespace GeoJSON.Net.Geometry
         /// <summary>
         /// Determines whether the specified object instances are not considered equal
         /// </summary>
-        public static bool operator !=(ConstrainedPolygon left, ConstrainedPolygon right)
+        public static bool operator !=(PolyLine left, PolyLine right)
         {
             return !(left == right);
         }
@@ -130,7 +130,7 @@ namespace GeoJSON.Net.Geometry
         /// <summary>
         /// Returns the hash code for the specified object
         /// </summary>
-        public int GetHashCode(ConstrainedPolygon other)
+        public int GetHashCode(PolyLine other)
         {
             return other.GetHashCode();
         }

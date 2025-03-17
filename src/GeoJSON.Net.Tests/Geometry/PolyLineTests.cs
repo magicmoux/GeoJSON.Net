@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace GeoJSON.Net.Tests.Geometry
 {
     [TestFixture]
-    public class ConstrainedPolygonTests : TestBase
+    public class PolyLineTests : TestBase
     {
         [Test]
         public void Can_Serialize()
@@ -45,7 +45,7 @@ namespace GeoJSON.Net.Tests.Geometry
 
             var expectedShape = GetComplexShape();
 
-            var actualShape = JsonConvert.DeserializeObject<ConstrainedPolygon>(json);
+            var actualShape = JsonConvert.DeserializeObject<PolyLine>(json);
             Assert.That(actualShape, Is.EqualTo(expectedShape));
         }
 
@@ -56,7 +56,7 @@ namespace GeoJSON.Net.Tests.Geometry
 
             var expectedShape = GetSimpleShape();
 
-            var actualShape = JsonConvert.DeserializeObject<ConstrainedPolygon>(json);
+            var actualShape = JsonConvert.DeserializeObject<PolyLine>(json);
 
             Assert.That(actualShape, Is.EqualTo(expectedShape));
         }
@@ -99,9 +99,9 @@ namespace GeoJSON.Net.Tests.Geometry
             Assert.That(shape.Coordinates.All(c => c.IsClosed()), Is.EqualTo(true));
         }
 
-        private ConstrainedPolygon GetSimpleShape(double offset = 0.0)
+        private PolyLine GetSimpleShape(double offset = 0.0)
         {
-            var shape = new ConstrainedPolygon(new List<MultiLineString>
+            var shape = new PolyLine(new List<MultiLineString>
             {
                 new MultiLineString(new List<LineString>()
                 {
@@ -117,10 +117,10 @@ namespace GeoJSON.Net.Tests.Geometry
             return shape;
         }
 
-        private ConstrainedPolygon GetComplexShape(double offset = 0.0) 
+        private PolyLine GetComplexShape(double offset = 0.0) 
         {
 
-            var shape = new ConstrainedPolygon(new List<MultiLineString>
+            var shape = new PolyLine(new List<MultiLineString>
             {
                 new MultiLineString(new List<LineString> {
                     new LineString(new List<IPosition>

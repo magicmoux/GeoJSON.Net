@@ -80,19 +80,19 @@ namespace GeoJSON.Net
         FeatureCollection,
 
         /// <summary>
-        /// Defines the ConstrainedPolygon type.
+        /// Defines the PolyLine type.
         /// </summary>
         /// <remarks>
         /// Not part of the current IETF RFC
         /// </remarks>
-        ConstrainedPolygon,
+        PolyLine,
 
         /// <summary>
-        /// Defines the MultiConstrainedPolygon type.
+        /// Defines the MultiPolyLine type.
         /// </summary>
         /// <remarks>
         /// Not part of the current IETF RFC
         /// </remarks>
-        MultiConstrainedPolygon
+        MultiPolyLine
     }
 }
