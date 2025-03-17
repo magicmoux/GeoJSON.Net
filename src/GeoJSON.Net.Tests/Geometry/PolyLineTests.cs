@@ -43,10 +43,10 @@ namespace GeoJSON.Net.Tests.Geometry
         {
             var json = GetExpectedJson();
 
-            var expectedShape = GetComplexShape();
+            var expected = GetComplexShape();
 
-            var actualShape = JsonConvert.DeserializeObject<PolyLine>(json);
-            Assert.That(actualShape, Is.EqualTo(expectedShape));
+            var actual = JsonConvert.DeserializeObject<PolyLine>(json);
+            Assert.That(actual, Is.EqualTo(expected));
         }
 
         [Test]
@@ -54,11 +54,11 @@ namespace GeoJSON.Net.Tests.Geometry
         {
             var json = GetExpectedJson();
 
-            var expectedShape = GetSimpleShape();
+            var expected = GetSimpleShape();
 
-            var actualShape = JsonConvert.DeserializeObject<PolyLine>(json);
+            var actual = JsonConvert.DeserializeObject<PolyLine>(json);
 
-            Assert.That(actualShape, Is.EqualTo(expectedShape));
+            Assert.That(actual, Is.EqualTo(expected));
         }
 
         [Test]
@@ -109,10 +109,17 @@ namespace GeoJSON.Net.Tests.Geometry
                     {
                         new Position(52.379790828551016, 5.3173828125),
                         new Position(52.36721467920585, 5.456085205078125),
-                        new Position(52.303440474272755, 5.386047363281249, 4.23),
-                        new Position(52.379790828551016, 5.3173828125),
-                    })
-                })
+						new Position(52.353440474272755, 5.386047363281249, 4.23),
+                    }),
+					new LineString(new List<IPosition>
+					{
+						new Position(52.353440474272755, 5.386047363281249, 4.23),
+						new Position(52.379790828551016, 5.3173828125),
+						new Position(52.36721467920585, 5.456085205078125),
+						new Position(52.303440474272755, 5.386047363281249, 4.23),
+						new Position(52.379790828551016, 5.3173828125),
+					})
+				})
             });
             return shape;
         }
