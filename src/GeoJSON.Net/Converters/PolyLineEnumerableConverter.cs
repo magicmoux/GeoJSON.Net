@@ -1,0 +1,79 @@
+﻿// Copyright © Joerg Battermann 2014, Matt Hunt 2017
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using GeoJSON.Net.Geometry;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+namespace GeoJSON.Net.Converters
+{
+    /// <summary>
+    /// Converter to read and write the <see cref="IEnumerable{MultiPolyLine}" /> type.
+    /// </summary>
+    public class PolyLineEnumerableConverter : JsonConverter
+    {
+        
+        private static readonly MultiLineStringEnumerableConverter PolyLineConverter = new MultiLineStringEnumerableConverter();
+        /// <summary>
+        ///     Determines whether this instance can convert the specified object type.
+        /// </summary>
+        /// <param name="objectType">Type of the object.</param>
+        /// <returns>
+        ///     <c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(IEnumerable<PolyLine>);
+        }
+
+        /// <summary>
+        ///     Reads the JSON representation of the object.
+        /// </summary>
+        /// <param name="reader">The <see cref="T:Newtonsoft.Json.JsonReader" /> to read from.</param>
+        /// <param name="objectType">Type of the object.</param>
+        /// <param name="existingValue">The existing value of object being read.</param>
+        /// <param name="serializer">The calling serializer.</param>
+        /// <returns>
+        ///     The object value.
+        /// </returns>
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var o = serializer.Deserialize<JArray>(reader);
+            var PolyLines =
+                o.Select(
+                    PolyLineObject => (IEnumerable<MultiLineString>) PolyLineConverter.ReadJson(
+                            PolyLineObject.CreateReader(),
+                            typeof(IEnumerable<MultiLineString>),
+                            PolyLineObject, serializer))
+                    .Select(lines => new PolyLine(lines))
+                    .ToList();
+
+            return PolyLines;
+        }
+
+        /// <summary>
+        ///     Writes the JSON representation of the object.
+        /// </summary>
+        /// <param name="writer">The <see cref="T:Newtonsoft.Json.JsonWriter" /> to write to.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="serializer">The calling serializer.</param>
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (value is IEnumerable<PolyLine> PolyLines)
+            {
+                writer.WriteStartArray();
+                foreach (var PolyLine in PolyLines)
+                {
+                    PolyLineConverter.WriteJson(writer, PolyLine.Coordinates, serializer);
+                }
+                writer.WriteEndArray();
+            }
+            else
+            {
+                throw new ArgumentException($"{nameof(PointEnumerableConverter)}: unsupported value {value}");
+            }
+        }
+    }
+}

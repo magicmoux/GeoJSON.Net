@@ -51,6 +51,8 @@ namespace GeoJSON.Net.Geometry
         {
         }
 
+        //The type is always required to avoid ambiguity with MultiPolygon
+        [JsonProperty("type", Required = Required.Always)]
         public override GeoJSONObjectType Type => GeoJSONObjectType.PolyLine;
 
         /// <summary>
